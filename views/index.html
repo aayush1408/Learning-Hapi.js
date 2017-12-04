@@ -6,6 +6,10 @@
 </head>
 <body>
     <h1>Index</h1>
-    <%= name %>
+    <% for (var i=0 ;i < data.length ;i++) { %>
+    <%= data[i].name %>
+    <%= data[i].email %>
+    <%= <br><br> %>
+    <% } %>
 </body>
 </html>
