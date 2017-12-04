@@ -27,6 +27,18 @@ server.route({
 });
 
 
+//Static page
+server.register(require('inert'),(err)=>{
+    if(err) throw err;
+    server.route({
+        method:'GET',
+        path:'/about',
+        handler:(request,reply)=>{
+            reply.file('./public/about.html');
+        }
+    });
+});
+
 
 // start your server
 server.start(function(err) {  
