@@ -5,10 +5,26 @@ var server = new Hapi.Server();
 
 // add server’s connection information
 server.connection({  
-  host: '127.0.0.1',
-  port: 2000
+  host: 'localhost',
+  port: 3000
 })
 
+//Set route
+server.route({
+    method:'GET',
+    path:'/',
+    handler:(request,reply)=>{
+        reply('Hello World');
+    }
+});
+//Dyanmic Routing
+server.route({
+    method:'GET',
+    path:'/user/{name}',
+    handler:(request,reply)=>{
+          reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
+    }
+});
 
 
 
@@ -20,4 +36,4 @@ server.start(function(err) {
   console.log('Server running at: ',server.info.uri);
 });
 
-module.exports = server;
+
