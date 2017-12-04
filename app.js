@@ -1,5 +1,6 @@
 const Hapi = require('hapi');
 const vision = require('vision');
+const User = require('./models/user.js');
 // create a server with a host and port
 var server = new Hapi.Server();
 
@@ -49,15 +50,47 @@ server.register(vision,(err)=>{
         path:__dirname +'/views'
     });
 });
-//Home page
+
+
+//Form page
 server.route({
     method:'GET',
-    path:'/home',
+    path:'/add',
     handler:(request,reply)=>{
-        reply.view('index',{name:'John Doe'});
+        reply.view('add');
     }
 });
 
+//Add data into mongodb
+server.route({
+    method:'POST',
+    path:'/add/user',
+    handler:(request,reply)=>{
+        let name = request.payload.name;
+        let email = request.payload.email;
+        var newUser = new User({
+            name:name,
+            email:email
+        });
+        newUser.save((err)=>{
+            if (err) throw err;
+            console.log('saved');
+         reply.redirect();
+        });
+    }
+});
+
+//GET the user
+server.route({
+    method:'GET',
+    path:'/list',
+    handler:(request,reply)=>{
+        User.find({}).exec((err,data)=>{
+            if (err) throw err;
+            reply.view('index',{data:data})
+        });
+    }
+});
 
 
 // start your server
