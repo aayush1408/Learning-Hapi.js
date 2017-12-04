@@ -1,5 +1,5 @@
-var Hapi = require('hapi');
-
+const Hapi = require('hapi');
+const vision = require('vision');
 // create a server with a host and port
 var server = new Hapi.Server();
 
@@ -38,6 +38,26 @@ server.register(require('inert'),(err)=>{
         }
     });
 });
+
+//Templates
+server.register(vision,(err)=>{
+    if(err) throw err;
+    server.views({
+        engines:{
+            html:require('ejs')
+        },
+        path:__dirname +'/views'
+    });
+});
+//Home page
+server.route({
+    method:'GET',
+    path:'/home',
+    handler:(request,reply)=>{
+        reply.view('index',{name:'John Doe'});
+    }
+});
+
 
 
 // start your server
